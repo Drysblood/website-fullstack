@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Backend
 backend/.venv/
 backend/db.sqlite3
@@ -9,3 +10,5 @@ backend/core/migrations/__pycache__/
 # Frontend
 frontend/node_modules/
 frontend/dist/
+=======
+
