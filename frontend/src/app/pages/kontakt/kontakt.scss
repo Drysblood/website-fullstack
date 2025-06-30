@@ -1,0 +1,126 @@
+.kontakt-section {
+  max-width: 900px;
+  margin: 0 auto;
+  background: linear-gradient(120deg, #f8f9fa 60%, #e3e6f3 100%);
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 32px rgba(13,110,253,0.07);
+  padding-bottom: 2.5rem;
+}
+
+.kontakt-header {
+  margin-bottom: 2.5rem;
+}
+
+.kontakt-header h1 {
+  background: linear-gradient(90deg, #0d6efd 60%, #dc3545 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.kontakt-form {
+  border-radius: 1.2rem;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  border: 2px solid #e3e6f3;
+}
+
+.btn-send {
+  background: #e9ecef;
+  color: #212529;
+  border: none;
+  font-weight: 600;
+  border-radius: 0.7rem;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  transition: background 0.2s, color 0.2s;
+  width: auto;
+  min-width: 140px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 2px 8px rgba(220,53,69,0.07);
+}
+.btn-send:hover, .btn-send:focus {
+  background: linear-gradient(90deg, #dc3545 60%, #fd7e14 100%);
+  color: #fff;
+}
+
+.kontakt-card {
+  border-radius: 1.2rem;
+  background: linear-gradient(120deg, #fff 60%, #f8f9fa 100%);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  margin-bottom: 1.5rem;
+  border: 2px solid #e3e6f3;
+}
+
+.kontakt-card .card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+.kontakt-card .card-text {
+  font-size: 1.05rem;
+}
+
+.kontakt-card .card-text.text-muted {
+  color: #dc3545 !important;
+}
+
+@media (max-width: 767px) {
+  .kontakt-section {
+    padding: 1.5rem 0.5rem;
+  }
+  .kontakt-form {
+    padding: 1.5rem 0.7rem;
+  }
+  .btn-send {
+    min-width: 100px;
+    font-size: 0.95rem;
+    padding: 0.45rem 1rem;
+  }
+}
+
+body.dark-mode {
+  background: #181a1b !important;
+  color: #f1f3f4 !important;
+}
+body.dark-mode .kontakt-section {
+  background: linear-gradient(120deg, #23272b 60%, #181a1b 100%) !important;
+  color: #f1f3f4 !important;
+}
+body.dark-mode .kontakt-form {
+  background: #23272b !important;
+  color: #f1f3f4 !important;
+  border-color: #343a40 !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35) !important;
+}
+body.dark-mode .btn-send {
+  background: #23272b !important;
+  color: #fd7e14 !important;
+  border-color: #fd7e14 !important;
+}
+body.dark-mode .btn-send:hover,
+body.dark-mode .btn-send:focus {
+  background: #fd7e14 !important;
+  color: #23272b !important;
+  border-color: #fd7e14 !important;
+}
+body.dark-mode .kontakt-card {
+  background: linear-gradient(120deg, #23272b 60%, #181a1b 100%) !important;
+  color: #f1f3f4 !important;
+  border-color: #343a40 !important;
+}
+body.dark-mode .kontakt-card,
+body.dark-mode .kontakt-card .card-title,
+body.dark-mode .kontakt-card .card-text,
+body.dark-mode .kontakt-section,
+body.dark-mode .kontakt-header h1 {
+  color: #f1f3f4 !important;
+}
+body.dark-mode .kontakt-header h1 {
+  color: #fd7e14 !important;
+  background: none !important;
+  -webkit-text-fill-color: #fd7e14 !important;
+}

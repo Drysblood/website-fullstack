@@ -1,0 +1,229 @@
+<div class="profil-container">
+  <div class="profil-header text-center mb-5">
+    <h1 class="display-5 fw-bold gradient-text mb-2"><i class="bi bi-person-circle me-2"></i>Profil</h1>
+    <p class="lead text-muted">Verwalten Sie Ihre persönlichen Daten, Sicherheit und Einstellungen.</p>
+    <div class="login-name mt-2"><span class="badge bg-primary"><i class="bi bi-person-badge me-1"></i>Login: {{ user.username }}</span></div>
+    <div class="avatar-wrapper mt-3">
+      <img *ngIf="user.avatar_url" [src]="user.avatar_url" class="avatar-img mb-2" alt="Profilbild">
+      <button class="btn btn-outline-secondary btn-sm" (click)="openAvatarModal()"><i class="bi bi-upload me-1"></i>Profilbild ändern</button>
+    </div>
+  </div>
+
+  <div class="profil-sections container">
+    <!-- Profilinformationen -->
+    <div class="profil-section card shadow-sm mb-4">
+      <div class="card-header bg-light fw-bold d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-info-circle me-2"></i>Profilinformationen</span>
+        <button class="btn btn-outline-primary btn-sm" (click)="openEditProfileModal()"><i class="bi bi-pencil"></i> Bearbeiten</button>
+      </div>
+      <div class="card-body">
+        <div class="row mb-2">
+          <div class="col-4 text-end text-muted">Vorname:</div>
+          <div class="col-8 text-start">{{ user.first_name }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4 text-end text-muted">Nachname:</div>
+          <div class="col-8 text-start">{{ user.last_name }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4 text-end text-muted">E-Mail:</div>
+          <div class="col-8 text-start">{{ user.email }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4 text-end text-muted">Adresse:</div>
+          <div class="col-8 text-start">{{ user.address || '-' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sicherheit -->
+    <div class="profil-section card shadow-sm mb-4">
+      <div class="card-header bg-light fw-bold"><i class="bi bi-shield-lock me-2"></i>Sicherheit</div>
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-4 text-end text-muted">Passwort:</div>
+          <div class="col-8 text-start">******** <button class="btn btn-link btn-sm px-1" (click)="openPasswordModal()"><i class="bi bi-pencil"></i> Ändern</button></div>
+        </div>
+        <div class="row mb-2 align-items-center">
+          <div class="col-4 text-end text-muted">2-Faktor-Auth:</div>
+          <div class="col-8 text-start">
+            <span class="badge bg-secondary me-2">Nicht aktiviert</span>
+            <button class="btn btn-outline-primary btn-sm" (click)="open2FAModal()"><i class="bi bi-shield-lock"></i> Aktivieren</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weitere Einstellungen (modern & erweitert) -->
+    <div class="profil-section card shadow-sm mb-4">
+      <div class="card-header bg-light fw-bold"><i class="bi bi-gear me-2"></i>Einstellungen</div>
+      <div class="card-body text-muted">
+        <div class="row mb-3">
+          <div class="col-5 text-end">Benachrichtigungen:</div>
+          <div class="col-7 text-start">
+            <div class="form-check form-switch d-inline-block me-3">
+              <input class="form-check-input" type="checkbox" id="notifEmail">
+              <label class="form-check-label" for="notifEmail">E-Mail</label>
+            </div>
+            <div class="form-check form-switch d-inline-block">
+              <input class="form-check-input" type="checkbox" id="notifPush">
+              <label class="form-check-label" for="notifPush">Push</label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-5 text-end">Sprache:</div>
+          <div class="col-7 text-start">
+            <select class="form-select form-select-sm w-auto d-inline-block">
+              <option>Deutsch</option>
+              <option>Englisch</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-5 text-end">Dark Mode:</div>
+          <div class="col-7 text-start">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="darkMode" [(ngModel)]="darkMode" (change)="toggleDarkMode()">
+              <label class="form-check-label" for="darkMode">Aktivieren</label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-5 text-end">Account löschen:</div>
+          <div class="col-7 text-start">
+            <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Löschen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Passwort ändern Modal -->
+  <div class="modal fade" [class.show]="showPasswordModal" [style.display]="showPasswordModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-key me-2"></i>Passwort ändern</h5>
+          <button type="button" class="btn-close" (click)="closePasswordModal()"></button>
+        </div>
+        <div class="modal-body">
+          <input type="password" class="form-control mb-2" [(ngModel)]="newPassword" placeholder="Neues Passwort">
+          <input type="password" class="form-control mb-2" [(ngModel)]="confirmPassword" placeholder="Passwort bestätigen">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closePasswordModal()">Abbrechen</button>
+          <button class="btn btn-primary" (click)="changePassword()">Speichern</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2FA Modal (modernisiert) -->
+  <div class="modal fade" [class.show]="show2FAModal" [style.display]="show2FAModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title"><i class="bi bi-shield-lock me-2"></i>2-Faktor-Authentifizierung</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="close2FAModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info mb-3">
+            <i class="bi bi-info-circle me-1"></i> Schützen Sie Ihren Account zusätzlich mit einer zweiten Sicherheitsstufe.
+          </div>
+          <label class="form-label fw-bold">Methode wählen:</label>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <div class="card h-100 p-2 border-primary border-2"
+                   [ngClass]="{'selected': twoFAType==='email', 'bg-light': twoFAType==='email'}"
+                   (click)="twoFAType='email'" style="cursor:pointer;">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-envelope-check fs-3 text-primary me-2"></i>
+                  <div>
+                    <div class="fw-bold">E-Mail</div>
+                    <div class="small text-muted">Code per E-Mail erhalten</div>
+                  </div>
+                </div>
+                <input class="form-check-input mt-2" type="radio" name="2faType" id="2faEmail" value="email" [(ngModel)]="twoFAType" style="display:none;">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="card h-100 p-2 border-success border-2"
+                   [ngClass]="{'selected': twoFAType==='google', 'bg-light': twoFAType==='google'}"
+                   (click)="twoFAType='google'" style="cursor:pointer;">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-shield-lock fs-3 text-success me-2"></i>
+                  <div>
+                    <div class="fw-bold">Google Authenticator</div>
+                    <div class="small text-muted">App-basiert, QR-Code</div>
+                  </div>
+                </div>
+                <input class="form-check-input mt-2" type="radio" name="2faType" id="2faGoogle" value="google" [(ngModel)]="twoFAType" style="display:none;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="close2FAModal()">Abbrechen</button>
+          <button class="btn btn-primary" [disabled]="!twoFAType" (click)="enable2FA()">Aktivieren</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Avatar Upload Modal -->
+  <div class="modal fade" [class.show]="showAvatarModal" [style.display]="showAvatarModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-upload me-2"></i>Profilbild ändern</h5>
+          <button type="button" class="btn-close" (click)="closeAvatarModal()"></button>
+        </div>
+        <div class="modal-body text-center">
+          <input type="file" accept="image/*" (change)="onAvatarSelected($event)" class="form-control mb-3">
+          <img *ngIf="avatarPreview" [src]="avatarPreview" class="avatar-img mb-2" style="max-width: 120px; border-radius: 50%;">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeAvatarModal()">Abbrechen</button>
+          <button class="btn btn-primary" [disabled]="!avatarFile" (click)="uploadAvatar()">Hochladen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Profil bearbeiten -->
+  <div class="modal fade" [class.show]="showEditProfileModal" [style.display]="showEditProfileModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-pencil me-2"></i>Profil bearbeiten</h5>
+          <button type="button" class="btn-close" (click)="closeEditProfileModal()"></button>
+        </div>
+        <form (ngSubmit)="saveProfileEdit()">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Vorname</label>
+              <input type="text" class="form-control" [(ngModel)]="editFirstName" name="editFirstName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nachname</label>
+              <input type="text" class="form-control" [(ngModel)]="editLastName" name="editLastName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">E-Mail</label>
+              <input type="email" class="form-control" [(ngModel)]="editEmail" name="editEmail" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Adresse</label>
+              <input type="text" class="form-control" [(ngModel)]="editAddress" name="editAddress" placeholder="Straße, PLZ, Ort">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" (click)="closeEditProfileModal()">Abbrechen</button>
+            <button class="btn btn-primary" type="submit">Speichern</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<div class="news-section-wrapper">
+  <div class="news-section-header text-center">
+    <h2 class="display-5 fw-bold mb-2 gradient-text">News</h2>
+  </div>
+  <div class="news-list-modern d-flex flex-column align-items-center">
+    <div *ngIf="newsList.length === 0" class="text-muted py-5">Noch keine News vorhanden.</div>
+    <div *ngFor="let news of newsList; let i = index" class="news-card-modern mb-4 w-100" style="max-width: 540px;">
+      <ng-container *ngIf="news.imageUrl">
+        <img [src]="news.imageUrl" alt="News Bild" class="news-image-modern">
+      </ng-container>
+      <div class="news-content-modern p-4">
+        <h3 class="news-title-modern mb-2">{{ news.title }}</h3>
+        <p class="news-text-modern mb-0">
+          {{ news.content | slice:0:60 }}<span *ngIf="news.content.length > 60 && !expandedNews[i]">...</span>
+          <span *ngIf="expandedNews[i]">{{ news.content.slice(60) }}</span>
+        </p>
+        <button *ngIf="news.content.length > 60" class="btn btn-link px-0 mt-2" (click)="toggleExpand(i)">
+          {{ expandedNews[i] ? 'Weniger anzeigen' : 'Weiter lesen' }}
+        </button>
+        <div class="news-date-modern mt-3">{{ news.created | date:'short' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
