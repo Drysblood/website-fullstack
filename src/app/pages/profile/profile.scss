@@ -1,0 +1,164 @@
+/* Google Fonts werden im index.html eingebunden, nicht direkt in SCSS! */
+
+.profil-container {
+  font-family: 'Inter', Arial, sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  background: linear-gradient(120deg, #f8f9fa 60%, #e3e6f3 100%);
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 32px rgba(13,110,253,0.07);
+  padding-bottom: 2.5rem;
+}
+
+.profil-header h1 {
+  background: linear-gradient(90deg, #0d6efd 60%, #dc3545 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.login-name .badge {
+  font-size: 1.1rem;
+  padding: 0.6em 1.2em;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.avatar-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #0d6efd;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.profil-section.card {
+  border-radius: 1.2rem;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  margin-bottom: 1.5rem;
+  border: 2px solid #e3e6f3;
+}
+
+/* 2FA Auswahlkarten */
+.card.border-primary,
+.card.border-success {
+  border-width: 2px !important;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+}
+.card.border-primary.selected,
+.card.border-success.selected {
+  box-shadow: 0 0 0 3px #0d6efd33;
+  border-color: #0d6efd !important;
+  background: #e7f1ff !important;
+}
+.card.border-success.selected {
+  box-shadow: 0 0 0 3px #19875433;
+  border-color: #198754 !important;
+  background: #e6f9f0 !important;
+}
+.card.border-primary:not(.selected):hover,
+.card.border-success:not(.selected):hover {
+  box-shadow: 0 0 0 2px #dc3545aa;
+  border-color: #dc3545 !important;
+  background: #f8f9fa;
+}
+
+.card-header.bg-light {
+  background: #f8f9fa !important;
+  font-size: 1.1rem;
+  color: #0d6efd;
+}
+
+.btn-outline-secondary {
+  border-radius: 0.7rem;
+  font-weight: 500;
+}
+
+.btn-primary, .btn-outline-primary {
+  border-radius: 0.7rem;
+  font-weight: 500;
+}
+
+.modal-content {
+  border-radius: 1.2rem;
+}
+
+@media (max-width: 767px) {
+  .profil-container {
+    padding: 1.5rem 0.5rem;
+  }
+  .profil-header h1 {
+    font-size: 2rem;
+  }
+  .avatar-img {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+body.dark-mode {
+  background: #181a1b !important;
+  color: #f1f3f4 !important;
+}
+
+body.dark-mode .profil-container {
+  background: linear-gradient(120deg, #23272b 60%, #181a1b 100%);
+  color: #f1f3f4;
+}
+body.dark-mode .profil-header h1 {
+  color: #fd7e14 !important;
+  background: none !important;
+  -webkit-text-fill-color: #fd7e14 !important;
+}
+body.dark-mode .profil-section.card,
+body.dark-mode .profil-section.card .card-body,
+body.dark-mode .profil-section.card .card-header,
+body.dark-mode .profil-container {
+  color: #f1f3f4 !important;
+}
+body.dark-mode .card, body.dark-mode .profil-section.card {
+  background: #23272b !important;
+  color: #f1f3f4;
+  border-color: #343a40 !important;
+}
+body.dark-mode .card-header.bg-light {
+  background: #23272b !important;
+  color: #fd7e14;
+}
+body.dark-mode .btn, body.dark-mode .btn-outline-secondary, body.dark-mode .btn-outline-primary {
+  background: #23272b;
+  color: #fd7e14;
+  border-color: #fd7e14;
+}
+body.dark-mode .btn:hover, body.dark-mode .btn:focus {
+  background: #fd7e14;
+  color: #23272b;
+  border-color: #fd7e14;
+}
+body.dark-mode .modal-content {
+  background: #23272b;
+  color: #f1f3f4;
+}
+body.dark-mode .form-control, body.dark-mode .form-select {
+  background: #181a1b;
+  color: #f1f3f4;
+  border-color: #343a40;
+}
+body.dark-mode .form-control:focus, body.dark-mode .form-select:focus {
+  background: #23272b;
+  color: #fd7e14;
+  border-color: #fd7e14;
+}
+body.dark-mode .badge.bg-primary, body.dark-mode .badge.bg-secondary {
+  background: #fd7e14 !important;
+  color: #23272b !important;
+}
+body.dark-mode .avatar-img {
+  border-color: #fd7e14;
+}

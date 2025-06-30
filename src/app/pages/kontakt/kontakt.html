@@ -1,0 +1,37 @@
+<div class="kontakt-section container py-5">
+  <div class="kontakt-header text-center mb-5">
+    <h1 class="display-5 fw-bold gradient-text mb-2"><i class="bi bi-envelope me-2"></i>Kontakt</h1>
+    <p class="lead text-muted">Wir freuen uns auf Ihre Nachricht! Nutzen Sie das Formular, um uns Ihr Anliegen mitzuteilen. Wir melden uns schnellstmöglich zurück.</p>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <form class="kontakt-form card shadow-lg p-4 border-0">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control form-control-lg" placeholder="Ihr Name" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">E-Mail</label>
+          <input type="email" class="form-control form-control-lg" placeholder="Ihre E-Mail" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nachricht</label>
+          <textarea class="form-control form-control-lg" rows="5" placeholder="Ihre Nachricht..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-send"><i class="bi bi-send me-2"></i>Nachricht senden</button>
+      </form>
+    </div>
+  </div>
+  <div class="row g-4 mt-5 justify-content-center">
+    <div class="col-md-6 col-lg-4" *ngFor="let kontakt of kontaktList">
+      <div class="card kontakt-card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <h5 class="card-title mb-2"><i class="bi bi-person-circle me-2"></i>{{ kontakt.name }}</h5>
+          <p class="card-text mb-1"><i class="bi bi-envelope-at me-2"></i>{{ kontakt.email }}</p>
+          <p class="card-text text-muted">{{ kontakt.message }}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="kontaktList.length === 0" class="col-12 text-muted text-center">Noch keine Kontakt-Einträge vorhanden.</div>
+  </div>
+</div>

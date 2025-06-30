@@ -1,0 +1,416 @@
+<nav class="dashboard-navbar navbar navbar-expand-lg navbar-dark bg-gradient-primary shadow-sm sticky-top">
+  <div class="container-fluid">
+    <!-- Keine Brand/Kein Dashboard-Text mehr hier -->
+  </div>
+</nav>
+
+<div class="dashboard-header text-center">
+  <h1 class="dashboard-title mb-2">Dashboard</h1>
+  <div class="user-info text-muted mb-0">Willkommen, {{ userName }}</div>
+</div>
+
+<!-- Tabs unterhalb der Header-Section -->
+<div class="dashboard-tabs-container">
+  <ul class="dashboard-tabs nav nav-tabs justify-content-center">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'news'" (click)="setActiveTab('news')"><i class="bi bi-newspaper me-1"></i>News</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'projekte'" (click)="setActiveTab('projekte')"><i class="bi bi-kanban me-1"></i>Projekte</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'service'" (click)="setActiveTab('service')"><i class="bi bi-gear me-1"></i>Service</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'kontakt'" (click)="setActiveTab('kontakt')"><i class="bi bi-envelope me-1"></i>Kontakt</a>
+    </li>
+  </ul>
+</div>
+
+<div class="dashboard-modern">
+  <div class="tab-content mt-5" id="dashboardTabsContent">
+    <!-- News Tab -->
+    <div *ngIf="activeTab === 'news'">
+      <div class="dashboard-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4><i class="bi bi-newspaper me-2"></i>News verwalten</h4>
+          <button class="btn btn-success" (click)="openNewsModal()"><i class="bi bi-plus"></i> News hinzufügen</button>
+        </div>
+        <div *ngIf="newsList.length === 0" class="alert alert-info text-center">
+          Noch keine News vorhanden. Klicke auf <b>News hinzufügen</b>, um den ersten Eintrag zu erstellen.
+        </div>
+        <ul class="list-group list-group-flush mb-3" *ngIf="newsList.length > 0">
+          <li *ngFor="let news of newsList" class="list-group-item d-flex justify-content-between align-items-center">
+            <span><span class="badge bg-primary me-2 text-uppercase">{{ news.title }}</span>{{ news.content }}</span>
+            <div>
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="openNewsModal(news)"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" (click)="removeNews(news)"><i class="bi bi-trash"></i></button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Projekte Tab -->
+    <div *ngIf="activeTab === 'projekte'">
+      <div class="dashboard-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4><i class="bi bi-kanban me-2"></i>Projekte verwalten</h4>
+          <button class="btn btn-info" (click)="openProjectModal()"><i class="bi bi-plus"></i> Projekt hinzufügen</button>
+        </div>
+        <div class="projects-list-modern d-flex flex-column align-items-center">
+          <div *ngIf="projects.length === 0" class="text-muted py-5">Noch keine Projekte vorhanden.</div>
+          <div *ngFor="let project of projects; let i = index" class="news-card-modern mb-4 w-100" style="max-width: 540px;">
+            <ng-container *ngIf="project.imageUrl">
+              <img [src]="project.imageUrl" alt="Projekt Bild" class="news-image-modern">
+            </ng-container>
+            <div class="news-content-modern p-4">
+              <h3 class="news-title-modern mb-2">{{ project.name }}</h3>
+              <p class="news-text-modern mb-2">{{ project.description }}</p>
+              <a *ngIf="project.link" [href]="project.link" target="_blank" rel="noopener" class="btn btn-link px-0 mt-2">Projekt öffnen <i class="bi bi-box-arrow-up-right"></i></a>
+              <div class="news-date-modern mt-3" *ngIf="project.created">{{ project.created | date:'short' }}</div>
+              <div class="dashboard-actions mt-3 d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm" (click)="openProjectModal(project)"><i class="bi bi-pencil"></i> Bearbeiten</button>
+                <button class="btn btn-outline-danger btn-sm" (click)="removeProject(project)"><i class="bi bi-trash"></i> Löschen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Service Tab -->
+    <div *ngIf="activeTab === 'service'">
+      <div class="dashboard-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4><i class="bi bi-gear me-2"></i>Service verwalten</h4>
+          <button class="btn btn-success" (click)="openServiceModal()"><i class="bi bi-plus"></i> Service hinzufügen</button>
+        </div>
+        <div class="row g-4">
+          <div *ngIf="serviceList.length === 0" class="col-12 text-muted">Noch keine Service-Einträge vorhanden.</div>
+          <div *ngFor="let service of serviceList" class="col-md-6 col-lg-4">
+            <div class="service-card card h-100 shadow-sm border-0">
+              <div class="service-card-img-wrapper">
+                <img *ngIf="service.imageUrl" [src]="service.imageUrl" class="service-card-img" alt="{{ service.name }}" />
+                <div *ngIf="!service.imageUrl" class="service-card-placeholder">
+                  <i class="bi bi-tools"></i>
+                </div>
+              </div>
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-center mb-2">
+                  <h5 class="card-title mb-0 flex-grow-1">{{ service.name }}</h5>
+                  <span *ngIf="service.category" class="badge bg-primary ms-2">{{ service.category }}</span>
+                </div>
+                <p class="card-text flex-grow-1">{{ service.description }}</p>
+                <div *ngIf="service.stack" class="mb-2">
+                  <span class="badge bg-info text-dark"><i class="bi bi-code-slash me-1"></i>{{ service.stack }}</span>
+                </div>
+                <div *ngIf="service.features" class="mb-2">
+                  <ul class="list-unstyled mb-0">
+                    <li *ngFor="let feat of service.features.split(',')">
+                      <i class="bi bi-check2-circle text-success me-1"></i>{{ feat.trim() }}
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="service.price" class="mb-2">
+                  <span class="badge bg-warning text-dark"><i class="bi bi-cash-coin me-1"></i>{{ service.price | currency:'EUR' }}</span>
+                  <span *ngIf="service.discount" class="badge bg-danger ms-2">-{{ service.discount }}%</span>
+                </div>
+                <div class="mt-3 d-flex justify-content-between align-items-center gap-2 flex-wrap">
+                  <a *ngIf="service.link" [href]="service.link" target="_blank" class="btn btn-outline-dark btn-sm service-link">
+                    <i class="bi bi-box-arrow-up-right me-1"></i>Mehr erfahren
+                  </a>
+                  <a *ngIf="service.buyUrl" [href]="service.buyUrl" target="_blank" class="btn btn-danger btn-sm service-buy">
+                    <i class="bi bi-cart me-1"></i>Jetzt kaufen
+                  </a>
+                  <span *ngIf="service.status" class="badge bg-success">{{ service.status }}</span>
+                </div>
+                <div class="dashboard-actions mt-3 d-flex gap-2">
+                  <button class="btn btn-outline-primary btn-sm" (click)="openServiceModal(service)"><i class="bi bi-pencil"></i> Bearbeiten</button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="removeService(service)"><i class="bi bi-trash"></i> Löschen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Kontakt Tab -->
+    <div *ngIf="activeTab === 'kontakt'">
+      <div class="dashboard-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4><i class="bi bi-envelope me-2"></i>Kontakt verwalten</h4>
+          <button class="btn btn-warning" (click)="openKontaktModal()"><i class="bi bi-plus"></i> Kontakt hinzufügen</button>
+        </div>
+        <ul class="list-group list-group-flush mb-3">
+          <li *ngIf="kontaktList.length === 0" class="list-group-item text-muted">Noch keine Kontakt-Einträge vorhanden.</li>
+          <li *ngFor="let kontakt of kontaktList" class="list-group-item d-flex justify-content-between align-items-center">
+            <span><b>{{ kontakt.name }}</b><br><span class="text-muted small">{{ kontakt.email }}</span><br><span>{{ kontakt.message }}</span></span>
+            <div>
+              <button class="btn btn-sm btn-outline-primary me-2" (click)="openKontaktModal(kontakt)"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-outline-danger" (click)="removeKontakt(kontakt)"><i class="bi bi-trash"></i></button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Modale bleiben wie gehabt -->
+</div>
+
+<!-- Fehlerausgabe -->
+<div *ngIf="error" class="alert alert-danger mt-3">
+  <b>API-Fehler:</b> {{ error }}
+</div>
+
+<!-- News Modal -->
+<div class="modal fade" id="newsModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-newspaper me-2"></i>News hinzufügen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="addNews()">
+          <div class="mb-3">
+            <label class="form-label">Titel</label>
+            <input type="text" class="form-control" [(ngModel)]="newsTitle" name="newsTitle" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Inhalt</label>
+            <textarea class="form-control" [(ngModel)]="newsContent" name="newsContent" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Bild-URL (optional)</label>
+            <input type="url" class="form-control" [(ngModel)]="newsImageUrl" name="newsImageUrl" placeholder="https://...">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Speichern</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Projekte Modal -->
+<div class="modal fade" id="projectModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-kanban me-2"></i>Projekt hinzufügen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveProject()">
+          <div class="mb-3">
+            <label class="form-label">Titel</label>
+            <input type="text" class="form-control" [(ngModel)]="projectName" name="projectName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-control" [(ngModel)]="projectDescription" name="projectDescription" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Anwendungen</label>
+            <input type="text" class="form-control" [(ngModel)]="projectApplications" name="projectApplications" placeholder="z.B. Angular, Django">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Version der Anwendung</label>
+            <input type="text" class="form-control" [(ngModel)]="projectVersion" name="projectVersion" placeholder="z.B. Angular 17, Django 5.0">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Bild-URL (optional)</label>
+            <input type="url" class="form-control" [(ngModel)]="projectImageUrl" name="projectImageUrl" placeholder="https://...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Projekt-Link (optional)</label>
+            <input type="url" class="form-control" [(ngModel)]="projectLink" name="projectLink" placeholder="https://...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">GitHub-Link (optional)</label>
+            <input type="url" class="form-control" [(ngModel)]="projectGithub" name="projectGithub" placeholder="https://github.com/...">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Speichern</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Service Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-gear me-2"></i>Service hinzufügen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveService()">
+          <div class="mb-3">
+            <label class="form-label">Titel</label>
+            <input type="text" class="form-control" [(ngModel)]="serviceName" name="serviceName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-control" [(ngModel)]="serviceDescription" name="serviceDescription" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Bild-URL (optional)</label>
+            <input type="url" class="form-control" [(ngModel)]="serviceImageUrl" name="serviceImageUrl" placeholder="https://...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Kategorie (optional)</label>
+            <input type="text" class="form-control" [(ngModel)]="serviceCategory" name="serviceCategory" placeholder="z.B. Beratung, Support">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Link (optional)</label>
+            <input type="url" class="form-control" [(ngModel)]="serviceLink" name="serviceLink" placeholder="https://...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status (optional)</label>
+            <input type="text" class="form-control" [(ngModel)]="serviceStatus" name="serviceStatus" placeholder="z.B. Aktiv, Inaktiv">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Preis (optional)</label>
+            <input type="number" class="form-control" [(ngModel)]="servicePrice" name="servicePrice" min="0" step="0.01" placeholder="z.B. 1200">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Technologien/Stack (optional)</label>
+            <input type="text" class="form-control" [(ngModel)]="serviceStack" name="serviceStack" placeholder="z.B. Angular, Django">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Kaufen/Buchen-Link (optional)</label>
+            <input type="url" class="form-control" [(ngModel)]="serviceBuyUrl" name="serviceBuyUrl" placeholder="https://...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Leistungen (Kommagetrennt, optional)</label>
+            <input type="text" class="form-control" [(ngModel)]="serviceFeatures" name="serviceFeatures" placeholder="z.B. Modernes Design, SEO, ...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Rabatt (%) (optional)</label>
+            <input type="number" class="form-control" [(ngModel)]="serviceDiscount" name="serviceDiscount" min="0" max="100" step="1" placeholder="z.B. 10">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Speichern</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Kontakt Modal -->
+<div class="modal fade" id="kontaktModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-envelope me-2"></i>Kontakt hinzufügen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveKontakt()">
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" [(ngModel)]="kontaktName" name="kontaktName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">E-Mail</label>
+            <input type="email" class="form-control" [(ngModel)]="kontaktEmail" name="kontaktEmail" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nachricht</label>
+            <textarea class="form-control" [(ngModel)]="kontaktMessage" name="kontaktMessage" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Speichern</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pricing Modal für Service-Angebote -->
+<div class="modal fade" id="pricingModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-cash-coin me-2"></i>Preisangebot bearbeiten</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="savePricing()">
+          <div class="mb-3">
+            <label class="form-label">Titel</label>
+            <input type="text" class="form-control" [(ngModel)]="pricingTitle" name="pricingTitle" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-control" [(ngModel)]="pricingDescription" name="pricingDescription" rows="2"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Preis (€)</label>
+            <input type="number" class="form-control" [(ngModel)]="pricingPrice" name="pricingPrice" min="0" step="0.01" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Rabatt (%)</label>
+            <input type="number" class="form-control" [(ngModel)]="pricingDiscount" name="pricingDiscount" min="0" max="100" step="1">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Leistungen</label>
+            <input type="text" class="form-control" [(ngModel)]="pricingFeatures" name="pricingFeatures" placeholder="Kommagetrennt, z.B. Modernes Design, SEO, ...">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Speichern</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Preisteil analog Service-Seite -->
+<div class="mt-5">
+  <h2 class="mb-3"><i class="bi bi-cash-coin me-2"></i>Was kostet eine moderne Website mit Angular & Django?</h2>
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-4">
+      <div class="card pricing-card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Landingpage</h5>
+          <ul class="list-unstyled mb-3">
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Modernes Design</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Responsiv</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>SEO-optimiert</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>1-2 Unterseiten</li>
+          </ul>
+          <div class="display-6 mb-3">ab 1.200 €</div>
+          <a href="#" class="btn btn-danger w-100"><i class="bi bi-cart me-1"></i>Jetzt anfragen</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card pricing-card h-100 shadow-sm border-primary">
+        <div class="card-body">
+          <h5 class="card-title">Business Website</h5>
+          <ul class="list-unstyled mb-3">
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Individuelles Design</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Kontakt-/Service-Formulare</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Blog/News-Bereich</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>bis 6 Unterseiten</li>
+          </ul>
+          <div class="display-6 mb-3">ab 2.500 €</div>
+          <a href="#" class="btn btn-danger w-100"><i class="bi bi-cart me-1"></i>Jetzt anfragen</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card pricing-card h-100 shadow-sm border-success">
+        <div class="card-body">
+          <h5 class="card-title">Web-App / Portal</h5>
+          <ul class="list-unstyled mb-3">
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Komplexe Funktionen</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Benutzerverwaltung</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>API-Anbindung (Django)</li>
+            <li><i class="bi bi-check2-circle text-success me-1"></i>Unbegrenzte Seiten</li>
+          </ul>
+          <div class="display-6 mb-3">ab 5.000 €</div>
+          <a href="#" class="btn btn-danger w-100"><i class="bi bi-cart me-1"></i>Jetzt anfragen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-muted mt-4 small">Alle Preise sind Richtwerte und abhängig vom Funktionsumfang. Gerne erstellen wir ein individuelles Angebot!</div>
+</div>
